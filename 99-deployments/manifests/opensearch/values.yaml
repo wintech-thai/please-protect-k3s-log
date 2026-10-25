@@ -1,3 +1,31 @@
+opensearch-dashboards:
+  replicas: 1
+
+  image:
+    repository: opensearchproject/opensearch-dashboards
+    pullPolicy: IfNotPresent
+
+  opensearchHosts: "https://opensearch-cluster-master:9200"
+
+  service:
+    type: ClusterIP
+    port: 5601
+
+  ingress:
+    enabled: false
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
+
+  config:
+    opensearch_dashboards.yml: |
+      server.host: "0.0.0.0"
+      opensearch.ssl.verificationMode: none
 
 opensearch:
   clusterName: opensearch-cluster
