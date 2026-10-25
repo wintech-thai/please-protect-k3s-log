@@ -1,0 +1,40 @@
+replicaCount: 1
+
+image:
+  repository: apache/kafka
+  tag: "4.1.1"
+  pullPolicy: IfNotPresent
+
+kafka:
+  # Keep this ID unchanged for the lifetime of the cluster.
+  clusterId: "MkU3OEVSUEcwNTJENDM2Qk"
+
+  nodeId: 1
+
+  numPartitions: 3
+
+  offsetsTopicReplicationFactor: 1
+  transactionStateLogReplicationFactor: 1
+  transactionStateLogMinIsr: 1
+
+  groupInitialRebalanceDelayMs: 0
+
+service:
+  type: ClusterIP
+  port: 9092
+  controllerPort: 9093
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+  # Empty means use the default StorageClass.
+  storageClassName: ""
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
