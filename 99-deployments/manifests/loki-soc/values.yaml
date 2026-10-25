@@ -34,7 +34,7 @@ loki-stack:
 
     grafana.ini:
       server:
-        root_url: "%(protocol)s://%(domain)s/tools/grafana-loki"
+        root_url: "%(protocol)s://%(domain)s/tools/grafana-soc"
         serve_from_sub_path: true
         domain: ""
 
