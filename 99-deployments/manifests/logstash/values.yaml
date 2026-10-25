@@ -88,22 +88,22 @@ logstash-syslog:
             codec => json
           }
 
-          #loki {
-          #  message_field => "message"
-          #  include_fields => [
-          #    "type", 
-          #    "category",
-          #    "evt_category", 
-          #    "debug_field1", 
-          #    "dst_net", 
-          #    "dst_port", 
-          #    "dst_ip_alert", 
-          #    "mac", 
-          #    "possible_user", 
-          #    "src_ip", 
-          #    "src_net"
-          #  ]
-          #  url => "http://loki-soc-gateway.loki-soc.svc.cluster.local/loki/api/v1/push"
-          #}
+          loki {
+            message_field => "message"
+            include_fields => [
+              "type", 
+              "category",
+              "evt_category", 
+              "debug_field1", 
+              "dst_net", 
+              "dst_port", 
+              "dst_ip_alert", 
+              "mac", 
+              "possible_user", 
+              "src_ip", 
+              "src_net"
+            ]
+            url => "http://loki-soc.loki-soc.svc.cluster.local:3100/loki/api/v1/push"
+          }
         }
       }
