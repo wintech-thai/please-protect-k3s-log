@@ -5,14 +5,17 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP  
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #nginx.ingress.kubernetes.io/use-regex: "true"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
     - http:
         paths:
-          - path: /tools/kafka-ui(/|$)(.*)
-            pathType: ImplementationSpecific
+          #- path: /tools/kafka-ui(/|$)(.*)
+          #  pathType: ImplementationSpecific
+
+          - path: /tools/kafka-ui
+            pathType: Prefix
             backend:
               service:
                 name: kafka-ui
