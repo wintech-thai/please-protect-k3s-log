@@ -6,6 +6,15 @@ opensearch-dashboards:
     pullPolicy: IfNotPresent
 
   opensearchHosts: "https://opensearch-cluster-master:9200"
+  extraEnvs:
+    - name: OPENSEARCH_USERNAME
+      value: admin
+
+    - name: OPENSEARCH_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: os-credentials
+          key: OS_PASSWORD
 
   service:
     type: ClusterIP
@@ -28,6 +37,8 @@ opensearch-dashboards:
       server.basePath: "/tools/os-dashboard"
       server.rewriteBasePath: true
       opensearch.ssl.verificationMode: none
+      opensearch.username: "admin"
+      opensearch.password: "${OPENSEARCH_PASSWORD}"
 
 opensearch:
   clusterName: opensearch-cluster
