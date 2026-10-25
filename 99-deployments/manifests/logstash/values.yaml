@@ -3,7 +3,9 @@
 logstash-syslog:
   enabled: true
   #maxUnavailable: 1
-
+  # Allow multiple replicas on the same node
+  antiAffinity: soft
+  
   replicas: 2
   fullnameOverride: logstash-syslog #From Syslog to Kafka
   image: asia-southeast1-docker.pkg.dev/its-artifact-commons/utils/logstash #"grafana/logstash-output-loki" 
@@ -60,8 +62,8 @@ logstash-syslog:
 
   logstashPipeline:
     logstash.conf: |
-      # echo "message" | nc -q0 syslog.devops.napbiotec.io 5140
-      # logger -P 5140 -d -n syslog.devops.napbiotec.io "hello-abc,world this is seub"
+      # echo "message" | nc -q0 localhost 30140
+      # logger -P 30140 -d -n localhost "hello-abc,world this is seub"
 
       input {
         syslog {
