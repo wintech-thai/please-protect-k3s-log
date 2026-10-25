@@ -26,6 +26,10 @@ opensearch-dashboards:
     opensearch_dashboards.yml: |
       server.host: "0.0.0.0"
       opensearch.ssl.verificationMode: none
+      server.host: "0.0.0.0"
+      server.basePath: "/tools/os-dashboard"
+      server.rewriteBasePath: true
+      opensearch.ssl.verificationMode: none
 
 opensearch:
   clusterName: opensearch-cluster

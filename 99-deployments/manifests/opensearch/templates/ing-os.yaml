@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: os-ing
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /tools/os-dashboard
+            pathType: Prefix
+            backend:
+              service:
+                name: opensearch-main-opensearch-dashboards
+                port:
+                  number: 5601
