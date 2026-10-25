@@ -44,9 +44,7 @@ logstash-syslog:
     - name: scripts
       mountPath: /scripts/
       readOnly: true
-    - name: secrets
-      mountPath: /secrets/
-      readOnly: true
+
     - name: configs
       mountPath: /configs/
       readOnly: true
