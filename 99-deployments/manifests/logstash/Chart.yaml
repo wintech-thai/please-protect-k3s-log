@@ -28,3 +28,9 @@ dependencies:
     condition: logstash-syslog.enabled
     repository: "https://helm.elastic.co"
     version: "8.5.1"
+
+  - name: "logstash"
+    alias: kafka-to-os
+    condition: kafka-to-os.enabled
+    repository: "https://helm.elastic.co"
+    version: "8.5.1"
