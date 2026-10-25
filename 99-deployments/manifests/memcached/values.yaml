@@ -1,0 +1,5 @@
+memcached:
+  enabled: true
+  fullnameOverride: memcached
+  image:
+    repository: bitnamilegacy/memcached
