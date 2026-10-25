@@ -4,3 +4,10 @@ description: Lightweight Apache Kafka using KRaft on k3s
 type: application
 version: 0.1.0
 appVersion: "4.1.1"
+
+dependencies:
+  - name: "kafka-ui"
+    alias: kafka-ui
+    condition: kafka-ui.enabled
+    repository: "https://provectus.github.io/kafka-ui-charts"
+    version: "0.7.5"

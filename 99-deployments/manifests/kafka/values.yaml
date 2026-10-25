@@ -38,3 +38,17 @@ resources:
   limits:
     cpu: "1"
     memory: 1Gi
+
+
+kafka-ui:
+  enabled: true
+  fullnameOverride: kafka-ui
+  envs:
+    config:
+      KAFKA_CLUSTERS_0_NAME: kafka-001
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      #KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: SCRAM-SHA-512
+      #KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_CLUSTERS_0_READONLY: "false"
+      AUTH_TYPE: "DISABLED"
+      SECURITY_BASIC_ENABLED: "true"
