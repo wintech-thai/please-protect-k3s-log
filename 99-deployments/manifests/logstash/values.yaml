@@ -4,7 +4,7 @@ logstash-syslog:
   enabled: true
   #maxUnavailable: 1
 
-  replicas: 1
+  replicas: 2
   fullnameOverride: logstash-syslog #From Syslog to Kafka
   image: asia-southeast1-docker.pkg.dev/its-artifact-commons/utils/logstash #"grafana/logstash-output-loki" 
   imageTag: v8.15.1-3
