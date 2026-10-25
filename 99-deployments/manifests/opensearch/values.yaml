@@ -1,0 +1,48 @@
+
+opensearch:
+  clusterName: opensearch-cluster
+  nodeGroup: master
+
+  singleNode: true
+  replicas: 1
+
+  image:
+    repository: opensearchproject/opensearch
+    pullPolicy: IfNotPresent
+
+  opensearchJavaOpts: "-Xms1g -Xmx1g"
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2Gi
+    limits:
+      memory: 3Gi
+
+  persistence:
+    enabled: true
+    size: 30Gi
+    accessModes:
+      - ReadWriteOnce
+    enableInitChown: true
+    # ใช้ default StorageClass ของ cluster
+    # storageClass: local-path
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+
+  sysctlInit:
+    enabled: true
+
+  securityConfig:
+    enabled: true
+
+  extraEnvs:
+    - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: os-credentials
+          key: OS_PASSWORD
