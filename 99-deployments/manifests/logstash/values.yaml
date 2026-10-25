@@ -1,6 +1,8 @@
 kafka-to-os:
   enabled: true
   replicas: 2
+  antiAffinity: soft
+
   fullnameOverride: logstash-kafka-to-os #From Kafka to OpenSearch
   image: asia-southeast1-docker.pkg.dev/its-artifact-commons/utils/logstash #"grafana/logstash-output-loki" 
   imageTag: v8.15.1-3
