@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: loki-soc
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          custom: "true"
+  template:
+    metadata:
+      name: 'loki-soc-{{name}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/wintech-thai/please-protect-k3s-log.git
+        targetRevision: "{{name}}" #Based on environment
+        path: '99-deployments/manifests/loki-soc'
+        helm:
+          ignoreMissingValueFiles: true
+          valueFiles:
+            - values.yaml
+            - values-{{name}}.yaml
+      destination:
+        name: in-cluster
+        namespace: loki-soc
+      syncPolicy:
+        automated:
+          selfHeal: false
+          prune: true
+        syncOptions:
+          - CreateNamespace=true
