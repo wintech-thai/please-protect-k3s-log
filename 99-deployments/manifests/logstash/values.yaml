@@ -80,22 +80,28 @@ logstash-syslog:
         #stdout { codec => rubydebug  }
 
         if [type] == "syslog" {
-          loki {
-            message_field => "message"
-            include_fields => [
-              "type", 
-              "category",
-              "evt_category", 
-              "debug_field1", 
-              "dst_net", 
-              "dst_port", 
-              "dst_ip_alert", 
-              "mac", 
-              "possible_user", 
-              "src_ip", 
-              "src_net"
-            ]
-            url => "http://loki-soc-gateway.loki-soc.svc.cluster.local/loki/api/v1/push"
+          kafka {
+            bootstrap_servers => "kafka.kafka.svc.cluster.local:9092"
+            topic_id => "syslog-received"
+            codec => json
           }
+
+          #loki {
+          #  message_field => "message"
+          #  include_fields => [
+          #    "type", 
+          #    "category",
+          #    "evt_category", 
+          #    "debug_field1", 
+          #    "dst_net", 
+          #    "dst_port", 
+          #    "dst_ip_alert", 
+          #    "mac", 
+          #    "possible_user", 
+          #    "src_ip", 
+          #    "src_net"
+          #  ]
+          #  url => "http://loki-soc-gateway.loki-soc.svc.cluster.local/loki/api/v1/push"
+          #}
         }
       }
