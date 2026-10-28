@@ -27,7 +27,7 @@ spec:
 
               command:
                 - ruby
-                - /app/loki-alert.rb
+                - loki-alert.rb
 
               env:
                 - name: CONFIG_RULE_PATH
