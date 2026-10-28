@@ -4,36 +4,43 @@ global:
   alert_ttl: 2m
 
 rules:
-  - name: HighErrorRate
-    enabled: true
-    query: |
-      {namespace="please-payment"} |= "ERROR"
-    severity: warning
+  - alert: LokiWatchdog
+    expr: |
+      sum(count_over_time({type="syslog"}[1m])) >= 1
+    for: 4h
     labels:
-      service: please-payment
-      category: application
+      severity: none
     annotations:
-      summary: "พบ ERROR ใน Please Payment"
-      description: "ตรวจพบ ERROR log ใน namespace please-payment"
-
-  - name: SecurityAlert
-    enabled: true
-    window: 10m
-    query: |
-      {namespace="please-protect"} |~ "(?i)unauthorized|intrusion|blocked"
-    severity: critical
+      summary: "This is an alert meant to ensure that the entire Loki alerting is functional."
+  - alert: UnknownCategoryError
+    expr: |
+      sum(count_over_time({type="syslog", category="unknown"}[15m])) >= 1
+    for: 30s
     labels:
-      service: please-protect
-      category: security
+      severity: warning
     annotations:
-      summary: "พบเหตุการณ์ด้านความปลอดภัย"
-      description: "ตรวจพบ log ที่ตรงกับ security detection rule"
-
-  - name: FailedLogin
-    enabled: true
-    query: |
-      {app="auth-service"} |= "login failed"
-    severity: warning
+      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} unknown identifiable log line(s)
+  - alert: SystemCategoryFound
+    expr: |
+      sum(count_over_time({type="syslog", category="system"}[15m])) >= 1
+    for: 0s
+    labels:
+      severity: warning
     annotations:
-      summary: "ตรวจพบ Login Failure"
-      description: "พบรายการ login failed ใน auth-service"
+      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} line(s) of [system] category
+  - alert: NoDataToSyslogError
+    expr: |
+      sum(count_over_time({type="syslog"}[5m])) <= 50
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} line(s) of log which less than the threshold [50]
+  - alert: FailedAttemptLogin
+    expr: |
+      sum(count_over_time({type="syslog",category="hotspot"} |= "login failed"[5m])) >= 1
+    for: 0s
+    labels:
+      severity: warning
+    annotations:
+      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} occurence(s) of failed login attempt
