@@ -1,0 +1,39 @@
+global:
+  window: 5m
+  limit: 100
+  alert_ttl: 2m
+
+rules:
+  - name: HighErrorRate
+    enabled: true
+    query: |
+      {namespace="please-payment"} |= "ERROR"
+    severity: warning
+    labels:
+      service: please-payment
+      category: application
+    annotations:
+      summary: "พบ ERROR ใน Please Payment"
+      description: "ตรวจพบ ERROR log ใน namespace please-payment"
+
+  - name: SecurityAlert
+    enabled: true
+    window: 10m
+    query: |
+      {namespace="please-protect"} |~ "(?i)unauthorized|intrusion|blocked"
+    severity: critical
+    labels:
+      service: please-protect
+      category: security
+    annotations:
+      summary: "พบเหตุการณ์ด้านความปลอดภัย"
+      description: "ตรวจพบ log ที่ตรงกับ security detection rule"
+
+  - name: FailedLogin
+    enabled: true
+    query: |
+      {app="auth-service"} |= "login failed"
+    severity: warning
+    annotations:
+      summary: "ตรวจพบ Login Failure"
+      description: "พบรายการ login failed ใน auth-service"

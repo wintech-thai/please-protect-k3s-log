@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-loki-alert
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 50
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: loki-alert
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: loki-alert
+              image: pjamenaja/onix-v2-jobs:develop-60fc22c
+              imagePullPolicy: IfNotPresent
+
+              command:
+                - ruby
+                - /app/loki-alert.rb
+
+              env:
+                - name: CONFIG_RULE_PATH
+                  value: /etc/loki-alert/rules.yaml
+
+                - name: ENDPOINT_LOKI
+                  value: "http://loki-soc:3100"
+
+                - name: ENDPOINT_ALM
+                  value: "http://alertmanager-operated.monitoring.svc.cluster.local:9093"
+
+                - name: QUERY_WINDOW
+                  value: "5m"
+
+                - name: HTTP_TIMEOUT
+                  value: "10"
+
+                - name: LOKI_QUERY_LIMIT
+                  value: "100"
+
+                - name: ALERT_TTL
+                  value: "2m"
+
+                - name: MAX_SAMPLE_LOGS
+                  value: "3"
+
+                - name: LOG_LEVEL
+                  value: "INFO"
+
+                - name: FAIL_FAST
+                  value: "true"
+
+              volumeMounts:
+                - name: rules
+                  mountPath: /etc/loki-alert
+                  readOnly: true
+
+          volumes:
+            - name: rules
+              configMap:
+                name: {{ .Release.Name }}-loki-alert-rules
+                items:
+                  - key: rules.yaml
+                    path: rules.yaml
