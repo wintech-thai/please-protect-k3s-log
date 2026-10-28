@@ -1,50 +1,51 @@
+
 global:
   window: 5m
   limit: 100
   alert_ttl: 2m
 
 rules:
-  - alert: LokiWatchdog
-    expr: |
+  - name: LokiWatchdog
+    enabled: true
+    window: 1m
+    query: |
       sum(count_over_time({type="syslog"}[1m])) >= 1
-    for: 4h
-    labels:
-      severity: none
+    severity: none
     annotations:
       summary: "This is an alert meant to ensure that the entire Loki alerting is functional."
 
-  - alert: UnknownCategoryError
-    expr: |
+  - name: UnknownCategoryError
+    enabled: true
+    window: 15m
+    query: |
       sum(count_over_time({type="syslog", category="unknown"}[15m])) >= 1
-    for: 30s
-    labels:
-      severity: warning
+    severity: warning
     annotations:
-      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} unknown identifiable log line(s)
+      description: "Found unknown identifiable log line(s)"
 
-  - alert: SystemCategoryFound
-    expr: |
+  - name: SystemCategoryFound
+    enabled: true
+    window: 15m
+    query: |
       sum(count_over_time({type="syslog", category="system"}[15m])) >= 1
-    for: 0s
-    labels:
-      severity: warning
+    severity: warning
     annotations:
-      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} line(s) of [system] category
+      description: "Found line(s) of [system] category"
 
-  - alert: NoDataToSyslogError
-    expr: |
+  - name: NoDataToSyslogError
+    enabled: true
+    window: 5m
+    query: |
       sum(count_over_time({type="syslog"}[5m])) <= 50
-    for: 30s
-    labels:
-      severity: warning
+    severity: warning
     annotations:
-      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} line(s) of log which less than the threshold [50]
+      description: "Found log line(s) less than the threshold [50]"
 
-  - alert: FailedAttemptLogin
-    expr: |
-      sum(count_over_time({type="syslog",category="hotspot"} |= "login failed"[5m])) >= 1
-    for: 0s
-    labels:
-      severity: warning
+  - name: FailedAttemptLogin
+    enabled: true
+    window: 5m
+    query: |
+      sum(count_over_time({type="syslog", category="hotspot"} |= "login failed"[5m])) >= 1
+    severity: warning
     annotations:
-      description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} occurence(s) of failed login attempt
+      description: "Detected failed login attempt(s)"
