@@ -12,6 +12,7 @@ rules:
       severity: none
     annotations:
       summary: "This is an alert meant to ensure that the entire Loki alerting is functional."
+
   - alert: UnknownCategoryError
     expr: |
       sum(count_over_time({type="syslog", category="unknown"}[15m])) >= 1
@@ -20,6 +21,7 @@ rules:
       severity: warning
     annotations:
       description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} unknown identifiable log line(s)
+
   - alert: SystemCategoryFound
     expr: |
       sum(count_over_time({type="syslog", category="system"}[15m])) >= 1
@@ -28,6 +30,7 @@ rules:
       severity: warning
     annotations:
       description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} line(s) of [system] category
+
   - alert: NoDataToSyslogError
     expr: |
       sum(count_over_time({type="syslog"}[5m])) <= 50
@@ -36,6 +39,7 @@ rules:
       severity: warning
     annotations:
       description: Found  {{ "{{" }} printf "%v" $value {{ "}}" }} line(s) of log which less than the threshold [50]
+
   - alert: FailedAttemptLogin
     expr: |
       sum(count_over_time({type="syslog",category="hotspot"} |= "login failed"[5m])) >= 1
