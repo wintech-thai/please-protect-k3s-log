@@ -22,7 +22,7 @@ spec:
 
           containers:
             - name: loki-alert
-              image: pjamenaja/onix-v2-jobs:develop-60fc22c
+              image: pjamenaja/onix-v2-jobs:v1.0.33
               imagePullPolicy: IfNotPresent
 
               command:
