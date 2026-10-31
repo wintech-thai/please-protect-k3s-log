@@ -13,9 +13,29 @@ loki-stack:
 
     persistence:
       enabled: true
-      size: 30Gi
+      size: 30Gi #TODO : ปรับให้รองรับ 90 วัน
 
-    config: {}
+    config:
+      schema_config:
+        configs:
+          - from: "2026-10-31"
+            store: tsdb
+            object_store: filesystem
+            schema: v13
+            index:
+              prefix: loki_index_
+              period: 24h
+
+      limits_config:
+        retention_period: 2160h
+
+      compactor:
+        working_directory: /data/retention
+        compaction_interval: 10m
+        retention_enabled: true
+        retention_delete_delay: 2h
+        delete_request_store: filesystem
+
     alerting_groups: []
 
   grafana:
