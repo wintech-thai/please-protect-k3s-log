@@ -36,10 +36,10 @@ rules:
     enabled: true
     window: 5m
     query: |
-      sum(count_over_time({type="syslog"}[5m])) <= 50
+      (sum(count_over_time({type="syslog"}[5m])) or vector(0)) <= 50
     severity: warning
     annotations:
-      description: "Found log line(s) less than the threshold [50]"
+      description: "Found syslog log line(s) less than or equal to threshold [50] within 5 minutes"
 
   - name: FailedAttemptLogin
     enabled: true
